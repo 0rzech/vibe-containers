@@ -8,6 +8,6 @@ exec podman build \
   --build-arg "GROUP_NAME=$(id --group --name)" \
   --build-arg "GROUP_ID=$(id --group)" \
   --build-arg "HOME=${HOME}" \
-  --build-arg "VIBE_HOME=${VIBE_HOME}" \
+  --build-arg "VIBE_HOME=${VIBE_HOME:-${HOME}/.vibe}" \
   --tag vibe-sandbox \
   .
