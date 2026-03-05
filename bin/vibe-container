@@ -18,4 +18,4 @@ exec podman run \
   --hostname "${name}" \
   --name "${name}" \
   localhost/vibe-sandbox \
-    vibe
+    "${1:-vibe}"

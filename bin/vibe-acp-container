@@ -17,4 +17,4 @@ exec podman run \
   --hostname "${name}" \
   --name "${name}" \
   localhost/vibe-sandbox \
-    vibe-acp
+    "${1:-vibe-acp}"
