@@ -3,7 +3,8 @@
 set -euo pipefail
 
 work_dir="${PWD}"
-name="vibe-$(basename "${work_dir}")-${RANDOM}"
+dir_name="$(basename "${work_dir}")"
+container_name="vibe-${dir_name//[^a-zA-Z0-9.-]/-}-${RANDOM}"
 vibe_home="${VIBE_HOME:-${HOME}/.vibe}"
 
 exec podman run \
@@ -16,7 +17,7 @@ exec podman run \
   --workdir "${work_dir}" \
   --volume "${vibe_home}:${vibe_home}:z" \
   --volume "${work_dir}:${work_dir}:z" \
-  --hostname "${name}" \
-  --name "${name}" \
+  --hostname "${container_name}" \
+  --name "${container_name}" \
   localhost/vibe-sandbox \
     "${1:-vibe}"
