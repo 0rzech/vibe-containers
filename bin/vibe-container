@@ -3,7 +3,7 @@
 set -euo pipefail
 
 work_dir="${PWD}"
-name="vibe-$(basename ${work_dir})-${RANDOM}"
+name="vibe-$(basename "${work_dir}")-${RANDOM}"
 
 exec podman run \
   --tty \
@@ -13,8 +13,8 @@ exec podman run \
   --security-opt no-new-privileges \
   --userns keep-id \
   --workdir "${work_dir}" \
-  --mount "type=bind,src=${VIBE_HOME},dst=${VIBE_HOME},relabel=shared" \
-  --mount "type=bind,src=${work_dir},dst=${work_dir},relabel=shared" \
+  --volume "${VIBE_HOME}:${VIBE_HOME}:z" \
+  --volume "${work_dir}:${work_dir}:z" \
   --hostname "${name}" \
   --name "${name}" \
   localhost/vibe-sandbox \
