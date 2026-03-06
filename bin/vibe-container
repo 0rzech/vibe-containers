@@ -8,6 +8,7 @@ container_name="vibe-${dir_name//[^a-zA-Z0-9.-]/-}-${RANDOM}"
 vibe_home="${VIBE_HOME:-${HOME}/.vibe}"
 
 exec podman run \
+  --init \
   --tty \
   --interactive \
   --rm \
@@ -17,6 +18,7 @@ exec podman run \
   --workdir "${work_dir}" \
   --volume "${vibe_home}:${vibe_home}:z" \
   --volume "${work_dir}:${work_dir}:z" \
+  --env "TERM=${TERM}" \
   --hostname "${container_name}" \
   --name "${container_name}" \
   localhost/vibe-sandbox \
