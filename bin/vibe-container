@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-work_dir="${PWD}"
+work_dir="$(realpath .)"
 dir_name="$(basename "${work_dir}")"
 container_name="vibe-${dir_name//[^a-zA-Z0-9.-]/-}-${RANDOM}"
 vibe_home="${VIBE_HOME:-${HOME}/.vibe}"
