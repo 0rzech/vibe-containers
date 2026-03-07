@@ -8,9 +8,9 @@ container_name="vibe-acp-${dir_name//[^a-zA-Z0-9.-]/-}-${RANDOM}"
 vibe_home="${VIBE_HOME:-${HOME}/.vibe}"
 
 exec podman run \
-  --init \
-  --interactive \
   --rm \
+  --interactive \
+  --init \
   --cap-drop all \
   --security-opt no-new-privileges \
   --userns keep-id \
