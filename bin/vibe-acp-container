@@ -17,7 +17,7 @@ exec podman run \
   --workdir "${work_dir}" \
   --volume "${vibe_home}:${vibe_home}:z" \
   --volume "${work_dir}:${work_dir}:z" \
-  --env "TERM=${TERM}" \
+  --env TERM \
   --env COLORTERM \
   --hostname "${container_name}" \
   --name "${container_name}" \
