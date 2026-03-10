@@ -3,6 +3,25 @@
 set -euo pipefail
 
 work_dir="$(realpath .)"
+prefix_file="${XDG_CONFIG_HOME:-${HOME}/.config}/vibe-containers/work-dir-prefix.list"
+
+if [[ -f "${prefix_file}" ]]; then
+  readarray -t prefixes < "${prefix_file}"
+
+  for prefix in "${prefixes[@]}"; do
+    if [[ "${work_dir}" == "${prefix}"* ]]; then
+      prefix_match=true
+      break
+    fi
+  done
+
+  if [[ "${prefix_match:-false}" == false ]]; then
+    echo >&2 "Working directory absolute path '${work_dir}'" \
+      "does not start with any prefix defined in '${prefix_file}'"
+    exit 1
+  fi
+fi
+
 dir_name="$(basename "${work_dir}")"
 container_name="vibe-acp-${dir_name//[^a-zA-Z0-9.-]/-}-${RANDOM}"
 vibe_home="${VIBE_HOME:-${HOME}/.vibe}"

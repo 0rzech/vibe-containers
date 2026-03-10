@@ -21,6 +21,8 @@ It includes a `Containerfile` and helper scripts to build and run containers wit
 
 - [Podman](https://podman.io) installed.
 - Proper user permissions to run containers.
+- At least [Bash](https://www.gnu.org/software/bash/) version 4.
+  [MacOS](https://www.apple.com/pl/os/macos/) comes with Bash 3, but users can install an up-to-date version themselves.
 
 ## Usage
 
@@ -49,6 +51,24 @@ This launches an interactive container with Mistral Vibe running in your current
 This launches an interactive container with Mistral Vibe ACP running in your current directory.
 
 This script is for use with editors and IDEs with support ACP.
+
+### Working Directory Validation
+
+The scripts validate the working directory against absolute path prefixes defined in `${XDG_CONFIG_HOME}/vibe-containers/work-dir-prefix.list` on [Linux](https://www.kernel.org) distributions and `~/.config/vibe-containers/work-dir-prefix.list` on other systems.
+
+If the file exists, the working directory must start with one of the prefixes listed in the file, one per line.
+If the file is empty, the working directory will not match any prefix, and thus the scripts will refuse to start the container.
+
+Example:
+
+```bash
+mkdir -p '~/.config/vibe-containers'
+echo '/home/user/projects' > '~/.config/vibe-containers/work-dir-prefix.list'
+```
+
+This ensures containers only run in approved directories.
+
+It is recommended to maintain the prefix list because the scripts will recursively change the working directory's [SELinux](https://github.com/SELinuxProject/selinux) context to grant access to Podman containers.
 
 ## How it Works
 
