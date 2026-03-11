@@ -106,9 +106,11 @@ This is why host UID and GID are the same inside containers.
 
 ## Limitations
 
-- The agent can only run binaries that are already in the container, which in this case means no SDKs.
-- Containers have network access.
+- Currently, Vibe Containers narrow the filesystem access only.
+- Your project directory, as well as Mistral Vibe configuration and API key, will be writable inside containers.
+- The agent can only run binaries that are accessible inside containers, which in this case means no SDKs.
 - The scripts assume that the `save_dir` in Mistral Vibe's `config.toml` is set to the effective value of `${VIBE_HOME:-${HOME}/.vibe}/logs/session`.
+- Containers ["don't contain as well as virtualization; they don't contain as well as separate systems"](https://www.youtube.com/watch?v=a9lE9Urr6AQ&t=806s).
 
 ## Security Features
 
