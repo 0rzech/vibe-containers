@@ -26,6 +26,15 @@ It includes a `Containerfile` and helper scripts to build and run containers wit
 
 ## Usage
 
+### Add `bin` Directory to Your PATH
+
+To use the container scripts conveniently, configure your shell to include `bin` directory in your `PATH` environment variable.
+Example for [POSIX](https://posix.opengroup.org)-compliant shells:
+
+```bash
+export PATH="${PATH}:/path/to/vibe-containers/bin"
+```
+
 ### Build the Container
 
 ```bash
@@ -37,7 +46,7 @@ This will create a container image tagged as `vibe-sandbox` with your current us
 ### Run Mistral Vibe
 
 ```bash
-./bin/vibe-container
+vibe-container
 ```
 
 This launches an interactive container with Mistral Vibe running in your current directory.
@@ -45,13 +54,13 @@ This launches an interactive container with Mistral Vibe running in your current
 You can also specify a custom entrypoint, for example:
 
 ```bash
-ENTRYPOINT=bash ./bin/vibe-container -c 'ls -ahlZ'
+ENTRYPOINT=bash vibe-container -c 'ls -ahlZ'
 ```
 
 ### Run Mistral Vibe ACP
 
 ```bash
-./bin/vibe-acp-container
+vibe-acp-container
 ```
 
 This launches an interactive container with Mistral Vibe ACP running in your current directory.
@@ -61,7 +70,7 @@ This script is for use with editors and IDEs with support ACP.
 You can also specify a custom entrypoint, for example:
 
 ```bash
-ENTRYPOINT=bash ./bin/vibe-acp-container -c 'ls -ahlZ'
+ENTRYPOINT=bash vibe-acp-container -c 'ls -ahlZ'
 ```
 
 ### Working Directory Validation
