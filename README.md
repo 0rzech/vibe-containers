@@ -42,6 +42,12 @@ This will create a container image tagged as `vibe-sandbox` with your current us
 
 This launches an interactive container with Mistral Vibe running in your current directory.
 
+You can also specify a custom entrypoint, for example:
+
+```bash
+ENTRYPOINT=bash ./bin/vibe-container -c 'ls -ahlZ'
+```
+
 ### Run Mistral Vibe ACP
 
 ```bash
@@ -51,6 +57,12 @@ This launches an interactive container with Mistral Vibe running in your current
 This launches an interactive container with Mistral Vibe ACP running in your current directory.
 
 This script is for use with editors and IDEs with support ACP.
+
+You can also specify a custom entrypoint, for example:
+
+```bash
+ENTRYPOINT=bash ./bin/vibe-acp-container -c 'ls -ahlZ'
+```
 
 ### Working Directory Validation
 
@@ -92,6 +104,8 @@ This is why host UID and GID are the same inside containers.
 ## Environment Variables
 
 - `VIBE_HOME`: Path to the vibe configuration directory (defaults to `~/.vibe`).
+- `ENTRYPOINT`: Entrypoint executable.
+  Defaults to `vibe` for `vibe-container` and `vibe-acp` for `vibe-acp-container`.
 
 ## License
 

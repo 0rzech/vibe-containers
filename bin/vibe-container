@@ -42,5 +42,6 @@ exec podman run \
   --env COLORTERM \
   --hostname "${container_name}" \
   --name "${container_name}" \
+  --entrypoint "${ENTRYPOINT:-vibe}" \
   localhost/vibe-sandbox \
-    "${1:-vibe}"
+    "${@}"
