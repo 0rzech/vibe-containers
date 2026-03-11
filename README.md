@@ -26,7 +26,7 @@ It includes a `Containerfile` and helper scripts to build and run containers wit
 
 ## Usage
 
-### Add `bin` Directory to Your PATH
+### Add `bin` Directory to Your `PATH`
 
 To use the container scripts conveniently, configure your shell to include `bin` directory in your `PATH` environment variable.
 Example for [POSIX](https://posix.opengroup.org)-compliant shells:
@@ -38,10 +38,11 @@ export PATH="${PATH}:/path/to/vibe-containers/bin"
 ### Build the Container
 
 ```bash
+cd /path/to/vibe-containers
 ./build
 ```
 
-This will create a container image tagged as `vibe-sandbox` with your current user's UID/GID.
+This will create a container image tagged as `vibe-sandbox` with your current user's UID and GID.
 
 ### Run Mistral Vibe
 
@@ -54,7 +55,7 @@ This launches an interactive container with Mistral Vibe running in your current
 You can also specify a custom entrypoint, for example:
 
 ```bash
-ENTRYPOINT=bash vibe-container -c 'ls -ahlZ'
+ENTRYPOINT=ls vibe-container -ahlZ
 ```
 
 ### Run Mistral Vibe ACP
@@ -70,12 +71,12 @@ This script is for use with editors and IDEs with support ACP.
 You can also specify a custom entrypoint, for example:
 
 ```bash
-ENTRYPOINT=bash vibe-acp-container -c 'ls -ahlZ'
+ENTRYPOINT=ls vibe-acp-container -ahlZ
 ```
 
 ### Working Directory Validation
 
-The scripts validate the working directory against absolute path prefixes defined in `${XDG_CONFIG_HOME}/vibe-containers/work-dir-prefix.list` on [Linux](https://www.kernel.org) distributions and `~/.config/vibe-containers/work-dir-prefix.list` on other systems.
+The scripts validate the working directory against absolute path prefixes defined in `${XDG_CONFIG_HOME}/vibe-containers/work-dir-prefix.list` file on [Linux](https://www.kernel.org) distributions and `${HOME}/.config/vibe-containers/work-dir-prefix.list` file on other systems or when `XDG_CONFIG_HOME` is not set.
 
 If the file exists, the working directory must start with one of the prefixes listed in the file, one per line.
 If the file is empty, the working directory will not match any prefix, and thus the scripts will refuse to start the container.
@@ -101,7 +102,7 @@ This is why host UID and GID are the same inside containers.
 
 - The agent can only run binaries that are already in the container, which in this case means no SDKs.
 - Containers have network access.
-- The scripts assume that the `save_dir` in `config.toml` is set to effective value of `${VIBE_HOME:-${HOME}/.vibe}`.
+- The scripts assume that the `save_dir` in Mistral Vibe's `config.toml` is set to the effective value of `${VIBE_HOME:-${HOME}/.vibe}/logs/session`.
 
 ## Security Features
 
