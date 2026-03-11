@@ -92,6 +92,12 @@ This ensures containers only run in approved directories.
 
 It is recommended to maintain the prefix list because the scripts will recursively change the working directory's [SELinux](https://github.com/SELinuxProject/selinux) context to grant access to Podman containers.
 
+### Environment Variables
+
+- `VIBE_HOME`: Path to the vibe configuration directory (defaults to `~/.vibe`).
+- `ENTRYPOINT`: Entrypoint executable.
+  Defaults to `vibe` for `vibe-container` and `vibe-acp` for `vibe-acp-container`.
+
 ## How it Works
 
 The working directory inside containers will be the same as the host's working directory (`.`) from which the containers are run.
@@ -110,12 +116,6 @@ This is why host UID and GID are the same inside containers.
 - No new privileges (`--security-opt no-new-privileges`).
 - User namespace isolation (`--userns keep-id`).
 - Root password disabled and account expired.
-
-## Environment Variables
-
-- `VIBE_HOME`: Path to the vibe configuration directory (defaults to `~/.vibe`).
-- `ENTRYPOINT`: Entrypoint executable.
-  Defaults to `vibe` for `vibe-container` and `vibe-acp` for `vibe-acp-container`.
 
 ## License
 
