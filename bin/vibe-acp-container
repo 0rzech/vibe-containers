@@ -33,6 +33,7 @@ exec podman run \
   --cap-drop all \
   --security-opt no-new-privileges \
   --userns keep-id \
+  --log-driver none \
   --workdir "${work_dir}" \
   --volume "${vibe_home}:${vibe_home}:z" \
   --volume "${work_dir}:${work_dir}:z" \
