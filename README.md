@@ -66,7 +66,19 @@ vibe-acp-container
 
 This launches an interactive container with Mistral Vibe ACP running in your current directory.
 
-This script is for use with editors and IDEs with support ACP.
+This script is for use with editors and IDEs with ACP support.
+For instance, you can add Vibe Container to [JetBrains IDEs](https://www.jetbrains.com/ides/) by creating the `~/.jetbrains/acp.json` file with the following contents:
+
+```json
+{
+  "default_mcp_settings": {},
+  "agent_servers": {
+    "Vibe Container": {
+      "command": "/path/to/vibe-containers/bin/vibe-acp-container"
+    }
+  }
+}
+```
 
 You can also specify a custom entrypoint, for example:
 
