@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
+work_dir="$(dirname "${BASH_SOURCE[0]}")"
+echo "Executing podman build in '${work_dir}' directory:"
+cd "${work_dir}"
+
 exec podman build \
   --build-arg "USER_NAME=$(id --user --name)" \
   --build-arg "USER_ID=$(id --user)" \
