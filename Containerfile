@@ -12,7 +12,17 @@ ARG VIBE_HOME="${HOME}/.vibe"
 RUN <<EOF
   set -euo pipefail
   microdnf upgrade --assumeyes --setopt=install_weak_deps=0
-  microdnf install --assumeyes --setopt=install_weak_deps=0 bat fd-find file git python ripgrep tree uv which
+  microdnf install --assumeyes --setopt=install_weak_deps=0 \
+    bat \
+    fd-find \
+    file \
+    git \
+    glibc-all-langpacks \
+    python \
+    ripgrep \
+    tree \
+    uv \
+    which
   passwd --delete root
   usermod --expiredate 1 root
   mkdir --parents --verbose "${HOME}"
