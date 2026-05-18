@@ -39,5 +39,5 @@ ENV VIBE_HOME="${VIBE_HOME}"
 
 RUN <<EOF
   set -euo pipefail
-  uv tool install mistral-vibe
+  uv tool install --no-cache mistral-vibe
 EOF
