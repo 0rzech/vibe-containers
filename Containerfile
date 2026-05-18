@@ -39,5 +39,7 @@ ENV VIBE_HOME="${VIBE_HOME}"
 
 RUN <<EOF
   set -euo pipefail
-  uv tool install --no-cache mistral-vibe
+  vibe_install_log="${HOME}/vibe-install-log.txt"
+  touch "${vibe_install_log}"
+  uv tool install --no-cache mistral-vibe 2>&1 | tee "${vibe_install_log}"
 EOF
