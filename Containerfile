@@ -1,4 +1,4 @@
-FROM quay.io/fedora/fedora-minimal:43
+FROM quay.io/fedora/fedora-minimal:44
 
 ARG USER_NAME='vibe'
 ARG USER_ID='1000'
