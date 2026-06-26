@@ -37,9 +37,18 @@ export PATH="${PATH}:/path/to/vibe-containers/bin"
 
 ### Build the Container
 
+With the latest version of Mistral Vibe:
+
 ```bash
 cd /path/to/vibe-containers
 ./build
+```
+
+With PEP 440 version specifier:
+
+```bash
+cd /path/to/vibe-containers
+./build ==2.18.0
 ```
 
 This will create a container image tagged as `vibe-sandbox` with your current user's UID and GID.

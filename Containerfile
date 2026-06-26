@@ -9,6 +9,8 @@ ARG GROUP_ID='1000'
 ARG HOME="/home/${USER_NAME}"
 ARG VIBE_HOME="${HOME}/.vibe"
 
+ARG VIBE_VERSION='>=2'
+
 RUN <<EOF
   set -euo pipefail
   microdnf upgrade --assumeyes --setopt=install_weak_deps=0
@@ -41,5 +43,5 @@ RUN <<EOF
   set -euo pipefail
   vibe_install_log="${HOME}/vibe-install-log.txt"
   touch "${vibe_install_log}"
-  uv tool install --no-cache mistral-vibe 2>&1 | tee "${vibe_install_log}"
+  uv tool install --no-cache "mistral-vibe${VIBE_VERSION}" 2>&1 | tee "${vibe_install_log}"
 EOF
