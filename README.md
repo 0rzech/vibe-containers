@@ -113,6 +113,20 @@ This ensures containers only run in approved directories.
 
 It is recommended to maintain the prefix list because the scripts will recursively change the working directory's [SELinux](https://github.com/SELinuxProject/selinux) context to grant access to Podman containers.
 
+### Custom Binaries via Drop-ins
+
+You can add custom binaries to the container by placing them in the `${XDG_CONFIG_HOME}/vibe-containers/drop-ins/bin` directory (or `${HOME}/.config/vibe-containers/drop-ins/bin` if `XDG_CONFIG_HOME` is not set).
+
+If this directory exists, it will be mounted as `/usr/local/bin` inside the container with read-only access.
+This allows you to extend the container's functionality without rebuilding the image.
+
+Example:
+
+```bash
+mkdir -p '~/.config/vibe-containers/drop-ins/bin'
+cp /path/to/custom-binary ~/.config/vibe-containers/drop-ins/bin/
+```
+
 ### Environment Variables
 
 - `VIBE_HOME`: Path to the vibe configuration directory (defaults to `~/.vibe`).

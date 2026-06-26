@@ -3,7 +3,10 @@
 set -euo pipefail
 
 work_dir="$(realpath .)"
-prefix_file="${XDG_CONFIG_HOME:-${HOME}/.config}/vibe-containers/work-dir-prefix.list"
+config_dir="${XDG_CONFIG_HOME:-${HOME}/.config}/vibe-containers"
+prefix_file="${config_dir}/work-dir-prefix.list"
+drop_ins_dir="${config_dir}/drop-ins"
+bin_drop_ins_dir="${drop_ins_dir}/bin"
 
 if [[ -f "${prefix_file}" ]]; then
   readarray -t prefixes < "${prefix_file}"
@@ -30,6 +33,15 @@ dir_name="$(basename "${work_dir}")"
 container_name="vibe-${dir_name//[^a-zA-Z0-9.-]/-}-${RANDOM}"
 vibe_home="${VIBE_HOME:-${HOME}/.vibe}"
 
+volumes=(
+  --volume "${vibe_home}:${vibe_home}:z"
+  --volume "${work_dir}:${work_dir}:z"
+)
+
+if [[ -d "${bin_drop_ins_dir}" ]]; then
+  volumes+=( --volume "${bin_drop_ins_dir}:/usr/local/bin:ro,z" )
+fi
+
 exec podman run \
   --rm \
   --tty \
@@ -40,8 +52,7 @@ exec podman run \
   --userns keep-id \
   --log-driver none \
   --workdir "${work_dir}" \
-  --volume "${vibe_home}:${vibe_home}:z" \
-  --volume "${work_dir}:${work_dir}:z" \
+  "${volumes[@]}" \
   --env TERM \
   --env COLORTERM \
   --hostname "${container_name}" \
