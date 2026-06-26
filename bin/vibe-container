@@ -9,6 +9,10 @@ if [[ -f "${prefix_file}" ]]; then
   readarray -t prefixes < "${prefix_file}"
 
   for prefix in "${prefixes[@]}"; do
+    if [[ "${prefix}" =~ ^[[:space:]]*(#|$) ]]; then
+      continue
+    fi
+
     if [[ "${work_dir}" == "${prefix}"* ]]; then
       prefix_match=true
       break
