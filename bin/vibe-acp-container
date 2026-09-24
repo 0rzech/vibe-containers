@@ -3,9 +3,13 @@
 set -euo pipefail
 
 work_dir="$(realpath .)"
-config_dir="${XDG_CONFIG_HOME:-${HOME}/.config}/vibe-containers"
-prefix_file="${config_dir}/work-dir-prefix.list"
-drop_ins_dir="${config_dir}/drop-ins"
+config_dir="${XDG_CONFIG_HOME:-${HOME}/.config}"
+goose_config_dir="${config_dir}/goose"
+goose_share_dir="${HOME}/.local/share/goose"
+goose_state_dir="${HOME}/.local/state/goose"
+vc_config_dir="${config_dir}/vibe-containers"
+prefix_file="${vc_config_dir}/work-dir-prefix.list"
+drop_ins_dir="${vc_config_dir}/drop-ins"
 bin_drop_ins_dir="${drop_ins_dir}/bin"
 
 if [[ -f "${prefix_file}" ]]; then
@@ -30,16 +34,24 @@ if [[ -f "${prefix_file}" ]]; then
 fi
 
 dir_name="$(basename "${work_dir}")"
-container_name="vibe-acp-${dir_name//[^a-zA-Z0-9.-]/-}-${RANDOM}"
-vibe_home="${VIBE_HOME:-${HOME}/.vibe}"
+container_name="goose-acp-${dir_name//[^a-zA-Z0-9.-]/-}-${RANDOM}"
 
 volumes=(
-  --volume "${vibe_home}:${vibe_home}:z"
+  --volume "${goose_config_dir}:${goose_config_dir}:z"
+  --volume "${goose_share_dir}:${goose_share_dir}:z"
+  --volume "${goose_state_dir}:${goose_state_dir}:z"
   --volume "${work_dir}:${work_dir}:z"
 )
 
 if [[ -d "${bin_drop_ins_dir}" ]]; then
   volumes+=( --volume "${bin_drop_ins_dir}:/usr/local/bin:ro,z" )
+fi
+
+entrypoint="${ENTRYPOINT:-goose}"
+args=("${@}")
+
+if [ -z "${ENTRYPOINT+x}" ]; then
+  args=(acp "${args[@]}")
 fi
 
 exec podman run \
@@ -56,6 +68,6 @@ exec podman run \
   --env COLORTERM \
   --hostname "${container_name}" \
   --name "${container_name}" \
-  --entrypoint "${ENTRYPOINT:-vibe-acp}" \
+  --entrypoint "${entrypoint}" \
   localhost/vibe-sandbox \
-    "${@}"
+    "${args[@]}"
