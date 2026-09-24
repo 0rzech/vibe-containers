@@ -1,15 +1,31 @@
+FROM quay.io/fedora/fedora-minimal:44 AS fetcher
+
+ARG AGENT_VERSION='1.52.0'
+
+RUN <<EOF
+  set -euo pipefail
+  microdnf upgrade --assumeyes --setopt=install_weak_deps=0
+  microdnf install --assumeyes --setopt=install_weak_deps=0 gzip tar
+  archive='goose-x86_64-unknown-linux-gnu.tar.gz'
+  url="https://github.com/aaif-goose/goose/releases/download/v${AGENT_VERSION}/${archive}"
+  dest='goose'
+  curl --proto '=https' --location --max-redirs 1 "${url}" --output "${archive}"
+  tar -xf "${archive}" --strip-components=1
+  chmod --verbose +x "${dest}"
+  rm --verbose "${archive}"
+EOF
+
 FROM quay.io/fedora/fedora-minimal:44
 
-ARG USER_NAME='vibe'
+COPY --from=fetcher /goose /usr/bin/goose
+
+ARG USER_NAME='agent'
 ARG USER_ID='1000'
 
-ARG GROUP_NAME='vibe'
+ARG GROUP_NAME='agent'
 ARG GROUP_ID='1000'
 
 ARG HOME="/home/${USER_NAME}"
-ARG VIBE_HOME="${HOME}/.vibe"
-
-ARG VIBE_VERSION='>=2'
 
 RUN <<EOF
   set -euo pipefail
@@ -23,7 +39,6 @@ RUN <<EOF
     python \
     ripgrep \
     tree \
-    uv \
     which
   passwd --delete root
   usermod --expiredate 1 root
@@ -34,14 +49,6 @@ RUN <<EOF
   useradd --uid "${USER_ID}" --gid "${GROUP_ID}" --home "${HOME}" "${USER_NAME}"
 EOF
 
-USER "${USER_NAME}"
-
 ENV PATH="${PATH}:${HOME}/.local/bin"
-ENV VIBE_HOME="${VIBE_HOME}"
 
-RUN <<EOF
-  set -euo pipefail
-  vibe_install_log="${HOME}/vibe-install-log.txt"
-  touch "${vibe_install_log}"
-  uv tool install --no-cache "mistral-vibe${VIBE_VERSION}" 2>&1 | tee "${vibe_install_log}"
-EOF
+USER "${USER_NAME}"
