@@ -25,6 +25,7 @@ RUN <<EOF
     tree \
     uv \
     which
+  microdnf clean all
   passwd --delete root
   usermod --expiredate 1 root
   mkdir --parents --verbose "${HOME}"
