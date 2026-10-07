@@ -1,15 +1,23 @@
 FROM quay.io/fedora/fedora-minimal:44 AS fetcher
 
-ARG AGENT_VERSION='1.53.0'
+ARG AGENT_VERSION=''
 
 RUN <<EOF
   set -euo pipefail
+
   microdnf upgrade --assumeyes --setopt=install_weak_deps=0
   microdnf install --assumeyes --setopt=install_weak_deps=0 gzip tar
   microdnf clean all
+
+  url_prefix='https://github.com/aaif-goose/goose/releases'
+  if [[ -z ${AGENT_VERSION} ]]; then
+    AGENT_VERSION="$(curl --fail --silent --show-error --location --head --output /dev/null --write-out "%{url_effective}" "${url_prefix}/latest")"
+    AGENT_VERSION="${AGENT_VERSION#${url_prefix}/tag/v}"
+  fi
   archive='goose-x86_64-unknown-linux-gnu.tar.gz'
-  url="https://github.com/aaif-goose/goose/releases/download/v${AGENT_VERSION}/${archive}"
+  url="${url_prefix}/download/v${AGENT_VERSION}/${archive}"
   dest='goose'
+
   echo "Fetching Goose ${AGENT_VERSION}"
   curl --proto '=https' --location --max-redirs 1 "${url}" --output "${archive}"
   tar -xf "${archive}" --strip-components=1
@@ -31,6 +39,7 @@ ARG HOME="/home/${USER_NAME}"
 
 RUN <<EOF
   set -euo pipefail
+
   microdnf upgrade --assumeyes --setopt=install_weak_deps=0
   microdnf install --assumeyes --setopt=install_weak_deps=0 \
     bat \
@@ -43,8 +52,10 @@ RUN <<EOF
     tree \
     which
   microdnf clean all
+
   passwd --delete root
   usermod --expiredate 1 root
+
   mkdir --parents --verbose "${HOME}"
   cp --recursive --verbose '/etc/skel/.' "${HOME}"
   chown --recursive --verbose "${USER_ID}:${GROUP_ID}" "${HOME}"
